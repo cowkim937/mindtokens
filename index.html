@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Prompt Token Keyword Optimizer | Mindmap Prompt Builder</title>
+  <meta name="description" content="Analyze one-shot prompts, extract keywords, expand a mindmap, and build more detailed prompts with estimated token metrics.">
+  <meta name="robots" content="index, follow">
+  <meta name="naver-site-verification" content="YOUR_NAVER_VERIFICATION_CODE">
+  <link rel="canonical" href="https://prompt-token-keyword-optimizer.pages.dev/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Prompt Token Keyword Optimizer">
+  <meta property="og:description" content="Extract prompt keywords, expand a mindmap, and build a more detailed optimized prompt.">
+  <meta property="og:url" content="https://prompt-token-keyword-optimizer.pages.dev/">
+  <meta property="og:image" content="https://prompt-token-keyword-optimizer.pages.dev/assets/img/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Prompt Token Keyword Optimizer">
+  <meta name="twitter:description" content="A static prompt keyword optimizer for mindmap-based prompt expansion.">
+  <meta name="twitter:image" content="https://prompt-token-keyword-optimizer.pages.dev/assets/img/og-image.png">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Prompt Token Keyword Optimizer",
+    "applicationCategory": "ProductivityApplication",
+    "operatingSystem": "Any",
+    "description": "A browser-based tool that extracts prompt keywords, visualizes a mindmap, and helps users build more detailed prompts.",
+    "url": "https://prompt-token-keyword-optimizer.pages.dev/"
+  }
+  </script>
+
+  <!-- Google AdSense Placeholder -->
+  <!-- Replace ca-pub-xxxxxxxxxxxxxxxx with real publisher ID after approval -->
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
+    <div class="container">
+      <a class="navbar-brand font-weight-bold" href="/" data-i18n="appTitle">Prompt Token Keyword Optimizer</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ml-auto align-items-lg-center">
+          <li class="nav-item"><a class="nav-link" href="/about.html" data-i18n="about">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="/privacy.html" data-i18n="privacy">Privacy</a></li>
+          <li class="nav-item"><a class="nav-link" href="/terms.html" data-i18n="terms">Terms</a></li>
+          <li class="nav-item ml-lg-3">
+            <select id="languageSelect" class="custom-select custom-select-sm" aria-label="Language">
+              <option value="ko">한국어</option>
+              <option value="en" selected>English</option>
+              <option value="ja">日本語</option>
+              <option value="zh-CN">简体中文</option>
+              <option value="zh-TW">繁體中文</option>
+              <option value="ru">Русский</option>
+              <option value="fr">Français</option>
+              <option value="de">Deutsch</option>
+              <option value="es">Español</option>
+              <option value="sv">Svenska</option>
+              <option value="nl">Nederlands</option>
+              <option value="no">Norsk</option>
+              <option value="ar">العربية</option>
+            </select>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero-section">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-7">
+          <span class="badge badge-soft" data-i18n="heroBadge">Static AI productivity tool</span>
+          <h1 data-i18n="heroTitle">Expand a one-shot prompt into a keyword-driven mindmap.</h1>
+          <p class="lead" data-i18n="heroSubtitle">Extract core terms, select useful branches, and track token growth before saving a session.</p>
+        </div>
+        <div class="col-lg-5 mt-4 mt-lg-0">
+          <div class="hero-metric">
+            <div>
+              <small data-i18n="privacyNoticeTitle">Privacy notice</small>
+              <strong data-i18n="privacyNotice">Prompts are saved only when you press Save Session.</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container my-4">
+    <section class="card tool-card mb-4">
+      <div class="card-body">
+        <label for="promptInput" class="font-weight-bold" data-i18n="inputLabel">One-shot prompt</label>
+        <textarea id="promptInput" class="form-control prompt-input" rows="7" data-i18n-placeholder="inputPlaceholder" placeholder="Enter your prompt..."></textarea>
+        <div class="text-muted small mt-2" data-i18n="piiWarning">Avoid entering private, sensitive, or confidential information.</div>
+        <div class="button-row mt-3">
+          <button id="analyzeBtn" class="btn btn-primary" type="button" data-i18n="analyze">Analyze Prompt</button>
+          <button id="resetBtn" class="btn btn-outline-secondary" type="button" data-i18n="reset">Reset</button>
+          <button id="copyBtn" class="btn btn-outline-primary" type="button" data-i18n="copy">Copy Optimized Prompt</button>
+          <button id="saveBtn" class="btn btn-success" type="button" data-i18n="save">Save Session</button>
+        </div>
+        <div id="statusMessage" class="status-message mt-3" role="status" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="row metric-grid">
+      <div class="col-6 col-lg"><div class="metric-card"><span data-i18n="originalTokens">Original Tokens</span><strong id="originalTokens">0</strong></div></div>
+      <div class="col-6 col-lg"><div class="metric-card"><span data-i18n="optimizedTokens">Optimized Tokens</span><strong id="optimizedTokens">0</strong></div></div>
+      <div class="col-6 col-lg"><div class="metric-card"><span data-i18n="addedTokens">Added Tokens</span><strong id="addedTokens">0</strong></div></div>
+      <div class="col-6 col-lg"><div class="metric-card"><span data-i18n="expansionRatio">Expansion Ratio</span><strong id="expansionRatio">0%</strong></div></div>
+      <div class="col-12 col-lg"><div class="metric-card"><span data-i18n="detailScore">Detail Score</span><strong id="detailScore">0</strong></div></div>
+    </section>
+
+    <section class="workspace-grid mt-4">
+      <div class="mindmap-panel">
+        <div class="panel-header">
+          <h2 data-i18n="mindmapTitle">Mindmap Visualization</h2>
+          <span id="keywordCount" class="badge badge-light">0</span>
+        </div>
+        <div id="mindmap" class="mindmap-canvas" aria-label="Prompt keyword mindmap"></div>
+      </div>
+
+      <aside class="builder-panel">
+        <div class="panel-header">
+          <h2 data-i18n="builderTitle">Optimized Prompt Builder</h2>
+        </div>
+        <div id="selectedKeywords" class="selected-keywords"></div>
+        <textarea id="optimizedPrompt" class="form-control optimized-output" rows="13" readonly></textarea>
+      </aside>
+    </section>
+
+    <section class="ad-placeholder my-4" aria-label="Advertisement">
+      <span data-i18n="adPlaceholder">Advertisement placeholder</span>
+    </section>
+
+    <section class="feature-section my-5">
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <h3 data-i18n="featureOneTitle">Keyword extraction</h3>
+          <p data-i18n="featureOneText">Client-side frequency scoring removes common stopwords and keeps useful prompt terms.</p>
+        </div>
+        <div class="col-md-4 mb-3">
+          <h3 data-i18n="featureTwoTitle">Mindmap expansion</h3>
+          <p data-i18n="featureTwoText">Click branches to add goals, context, constraints, style, and output requirements.</p>
+        </div>
+        <div class="col-md-4 mb-3">
+          <h3 data-i18n="featureThreeTitle">Token metrics</h3>
+          <p data-i18n="featureThreeText">Estimate token growth and detail score before saving to Firestore.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer py-4">
+    <div class="container d-flex flex-column flex-md-row justify-content-between">
+      <span>&copy; 2026 Prompt Token Keyword Optimizer</span>
+      <span><a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a> · <a href="/about.html">About</a></span>
+    </div>
+  </footer>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module" src="/assets/js/app.js"></script>
+</body>
+</html>

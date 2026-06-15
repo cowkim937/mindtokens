@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://prompt-token-keyword-optimizer.pages.dev/sitemap.xml

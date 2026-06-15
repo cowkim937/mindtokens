@@ -62,6 +62,8 @@ service cloud.firestore {
 
 `index.html` includes title, description, canonical URL, Open Graph, Twitter Card, viewport, JSON-LD, and an advertisement placeholder. Replace the placeholder publisher ID in comments and `ads.txt` after Google AdSense approval.
 
+The support pages `about.html`, `terms.html`, and `contact.html` use the same language selection stored by the main app.
+
 ## Naver Search Advisor
 
 Replace this placeholder in HTML files:

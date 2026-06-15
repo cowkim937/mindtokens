@@ -37,7 +37,8 @@ const els = {
 document.addEventListener("DOMContentLoaded", init);
 
 function init() {
-  applyLanguage(state.language);
+  const savedLanguage = localStorage.getItem("promptOptimizerLanguage") || state.language;
+  applyLanguage(i18n[savedLanguage] ? savedLanguage : state.language);
   renderEmptyMindmap(els.mindmap, getText(state.language, "emptyMindmap"));
   bindEvents();
 }
@@ -53,6 +54,7 @@ function bindEvents() {
 
 function applyLanguage(language) {
   state.language = language;
+  localStorage.setItem("promptOptimizerLanguage", language);
   document.documentElement.lang = language;
   document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
   els.languageSelect.value = language;

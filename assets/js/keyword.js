@@ -2,10 +2,15 @@
 const stopwords = new Set([
   "the", "and", "for", "with", "that", "this", "from", "you", "your", "are", "was", "were", "will", "can", "into", "about",
   "create", "make", "write", "please", "using", "use", "how", "what", "when", "where", "why", "who", "to", "of", "in", "on",
-  "a", "an", "is", "it", "as", "by", "be", "or", "at", "if", "then",
-  "그리고", "하지만", "또는", "에서", "으로", "에게", "하는", "하고", "이다", "있는", "없는", "위한", "대한", "사용", "작성", "만들어",
-  "です", "ます", "する", "これ", "それ", "ため", "그리고", "请", "一个", "这个", "使用", "для", "что", "как", "avec", "pour", "und", "oder", "con", "para"
+  "a", "an", "is", "it", "as", "by", "be", "or", "at", "if", "then", "also", "very", "just", "more", "most", "not", "so",
+  "그리고", "그러나", "하지만", "또는", "또한", "즉", "그래서", "따라서", "매우", "너무", "아주", "잘", "더", "가장", "에서", "으로", "에게",
+  "하는", "하고", "이다", "있는", "없는", "위한", "대한", "사용", "작성", "만들어", "해주세요", "해줘", "관련", "통해", "위해",
+  "です", "ます", "する", "これ", "それ", "ため", "そして", "しかし", "また", "请", "一个", "这个", "使用", "以及", "但是",
+  "для", "что", "как", "или", "avec", "pour", "et", "mais", "und", "oder", "con", "para", "pero", "och", "eller", "maar"
 ]);
+
+const koreanParticlePattern = /(으로서|으로써|에게서|에서|에게|으로|부터|까지|처럼|보다|마다|밖에|조차|마저|께서|한테|라도|이나|거나|하고|이며|이랑|랑|은|는|이|가|을|를|에|의|와|과|도|만|로)$/;
+const koreanAdverbPattern = /게$|히$|도록$/;
 
 const englishExpansionMap = {
   marketing: ["target audience", "conversion", "headline", "landing page", "emotional trigger", "call to action", "brand tone"],
@@ -40,23 +45,32 @@ export function extractKeywords(text) {
     .toLowerCase()
     .replace(/[^\p{L}\p{N}\s-]/gu, " ")
     .split(/\s+/)
-    .map((token) => token.replace(/^-+|-+$/g, ""))
+    .map(normalizeWord)
     .filter(Boolean)
     .filter((token) => !stopwords.has(token))
     .filter((token) => /[a-z]/i.test(token) ? token.length >= 3 : token.length >= 2);
 
   const scores = new Map();
-  tokens.forEach((token) => {
-    const current = scores.get(token) || { word: token, count: 0 };
+  tokens.forEach((token, index) => {
+    const current = scores.get(token) || { word: token, count: 0, firstIndex: index };
     current.count += 1;
     current.score = current.count * 10 + Math.min(token.length, 14);
     scores.set(token, current);
   });
 
   return Array.from(scores.values())
-    .sort((a, b) => b.score - a.score || a.word.localeCompare(b.word))
+    .sort((a, b) => a.firstIndex - b.firstIndex || b.score - a.score)
     .slice(0, 20)
     .map((item) => item.word);
+}
+
+function normalizeWord(token) {
+  let word = token.replace(/^-+|-+$/g, "");
+  if (/[\uac00-\ud7af]/.test(word)) {
+    word = word.replace(koreanParticlePattern, "");
+    if (koreanAdverbPattern.test(word)) return "";
+  }
+  return word;
 }
 
 export function getExpansions(keyword, language) {

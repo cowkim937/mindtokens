@@ -18,38 +18,41 @@ export function renderMindmap(options) {
   const centerX = width / 2;
   const centerY = height / 2;
   const svg = createSvg("svg", { class: "mindmap-svg", viewBox: `0 0 ${width} ${height}`, role: "img" });
+  const viewport = createSvg("g", { class: "mindmap-viewport" });
+  addDragPan(svg, viewport);
 
-  const rootLabel = summarizePrompt(prompt);
-  drawNode(svg, centerX, centerY, 74, rootLabel, "node-root", () => onNodeSelect(rootLabel, 0));
+  const rootLabel = keywords[0] || summarizePrompt(prompt);
+  drawNode(viewport, centerX, centerY, 74, rootLabel, "node-root", () => onNodeSelect(rootLabel, 0));
 
   const keywordRadius = Math.min(width, height) * 0.31;
-  keywords.forEach((keyword, index) => {
+  keywords.slice(1).forEach((keyword, index) => {
     const angle = (Math.PI * 2 * index) / Math.max(keywords.length, 1) - Math.PI / 2;
     const x = clamp(centerX + Math.cos(angle) * keywordRadius, 70, width - 70);
     const y = clamp(centerY + Math.sin(angle) * keywordRadius, 70, height - 70);
-    drawLine(svg, centerX, centerY, x, y);
-    drawNode(svg, x, y, 48, keyword, "node-keyword", () => {
+    drawLine(viewport, centerX, centerY, x, y);
+    drawNode(viewport, x, y, 48, keyword, "node-keyword", () => {
       onNodeSelect(keyword, 1);
       onExpand(keyword, "keyword");
     });
 
     if (expandedMap[keyword]) {
-      drawExpansions(svg, keyword, x, y, angle, language, expandedMap, onNodeSelect, onExpand);
+      drawExpansions(viewport, svg, keyword, x, y, angle, language, expandedMap, onNodeSelect, onExpand);
     }
   });
 
+  svg.appendChild(viewport);
   container.appendChild(svg);
 }
 
-function drawExpansions(svg, keyword, parentX, parentY, baseAngle, language, expandedMap, onNodeSelect, onExpand) {
+function drawExpansions(viewport, svg, keyword, parentX, parentY, baseAngle, language, expandedMap, onNodeSelect, onExpand) {
   const expansions = getExpansions(keyword, language).slice(0, 5);
   expansions.forEach((expansion, index) => {
     const spread = (index - (expansions.length - 1) / 2) * 0.32;
     const angle = baseAngle + spread;
     const x = clamp(parentX + Math.cos(angle) * 118, 62, Number(svg.getAttribute("viewBox").split(" ")[2]) - 62);
     const y = clamp(parentY + Math.sin(angle) * 88, 62, Number(svg.getAttribute("viewBox").split(" ")[3]) - 62);
-    drawLine(svg, parentX, parentY, x, y);
-    drawNode(svg, x, y, 38, expansion, "node-expansion", () => {
+    drawLine(viewport, parentX, parentY, x, y);
+    drawNode(viewport, x, y, 38, expansion, "node-expansion", () => {
       onNodeSelect(expansion, 2);
       onExpand(`${keyword}::${expansion}`, "expansion");
     });
@@ -59,8 +62,8 @@ function drawExpansions(svg, keyword, parentX, parentY, baseAngle, language, exp
         const detailAngle = angle + (detailIndex - 1) * 0.22;
         const dx = clamp(x + Math.cos(detailAngle) * 96, 48, Number(svg.getAttribute("viewBox").split(" ")[2]) - 48);
         const dy = clamp(y + Math.sin(detailAngle) * 70, 48, Number(svg.getAttribute("viewBox").split(" ")[3]) - 48);
-        drawLine(svg, x, y, dx, dy);
-        drawNode(svg, dx, dy, 30, detail, "node-detail", () => onNodeSelect(detail, 3));
+        drawLine(viewport, x, y, dx, dy);
+        drawNode(viewport, dx, dy, 30, detail, "node-detail", () => onNodeSelect(detail, 3));
       });
     }
   });
@@ -102,4 +105,36 @@ function createSvg(tag, attrs) {
 
 function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
+}
+
+function addDragPan(svg, viewport) {
+  const pan = { active: false, startX: 0, startY: 0, x: 0, y: 0 };
+  const apply = () => viewport.setAttribute("transform", `translate(${pan.x} ${pan.y})`);
+
+  svg.addEventListener("pointerdown", (event) => {
+    if (event.button !== 0) return;
+    pan.active = true;
+    pan.startX = event.clientX - pan.x;
+    pan.startY = event.clientY - pan.y;
+    svg.setPointerCapture(event.pointerId);
+    svg.classList.add("is-dragging");
+  });
+
+  svg.addEventListener("pointermove", (event) => {
+    if (!pan.active) return;
+    pan.x = event.clientX - pan.startX;
+    pan.y = event.clientY - pan.startY;
+    apply();
+  });
+
+  svg.addEventListener("pointerup", (event) => {
+    pan.active = false;
+    svg.releasePointerCapture(event.pointerId);
+    svg.classList.remove("is-dragging");
+  });
+
+  svg.addEventListener("pointerleave", () => {
+    pan.active = false;
+    svg.classList.remove("is-dragging");
+  });
 }

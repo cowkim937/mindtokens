@@ -6,6 +6,7 @@ export const i18n = {
     about: "소개",
     privacy: "개인정보",
     terms: "이용약관",
+    contact: "문의",
     heroBadge: "정적 AI 생산성 도구",
     heroTitle: "원샷 프롬프트를 키워드 마인드맵으로 확장하세요.",
     heroSubtitle: "핵심어를 뽑고 가지를 선택하며 저장 전 토큰 증가량을 확인합니다.",
@@ -48,6 +49,7 @@ export const i18n = {
     about: "About",
     privacy: "Privacy",
     terms: "Terms",
+    contact: "Contact",
     heroBadge: "Static AI productivity tool",
     heroTitle: "Expand a one-shot prompt into a keyword-driven mindmap.",
     heroSubtitle: "Extract core terms, select useful branches, and track token growth before saving a session.",
@@ -88,23 +90,23 @@ export const i18n = {
 };
 
 const labels = {
-  ja: ["プロンプトトークンキーワード最適化", "最適化するプロンプトを入力してください...", "紹介", "プライバシー", "利用規約"],
-  "zh-CN": ["提示词令牌关键词优化器", "输入要优化的提示词...", "关于", "隐私", "条款"],
-  "zh-TW": ["提示詞 Token 關鍵字最佳化工具", "輸入要最佳化的提示詞...", "關於", "隱私", "條款"],
-  ru: ["Оптимизатор ключевых слов промпта", "Введите промпт...", "О сервисе", "Конфиденциальность", "Условия"],
-  fr: ["Optimiseur de mots-clés de prompt", "Saisissez votre prompt...", "À propos", "Confidentialité", "Conditions"],
-  de: ["Prompt Token Keyword Optimizer", "Prompt eingeben...", "Über", "Datenschutz", "Bedingungen"],
-  es: ["Optimizador de palabras clave de prompts", "Introduce tu prompt...", "Acerca de", "Privacidad", "Términos"],
-  sv: ["Prompt Token Keyword Optimizer", "Ange din prompt...", "Om", "Integritet", "Villkor"],
-  nl: ["Prompt Token Keyword Optimizer", "Voer je prompt in...", "Over", "Privacy", "Voorwaarden"],
-  no: ["Prompt Token Keyword Optimizer", "Skriv inn prompten din...", "Om", "Personvern", "Vilkår"],
-  ar: ["محسن كلمات المطالبة", "أدخل المطالبة...", "حول", "الخصوصية", "الشروط"]
+  ja: ["プロンプトトークンキーワード最適化", "最適化するプロンプトを入力してください...", "紹介", "プライバシー", "利用規約", "お問い合わせ"],
+  "zh-CN": ["提示词令牌关键词优化器", "输入要优化的提示词...", "关于", "隐私", "条款", "联系"],
+  "zh-TW": ["提示詞 Token 關鍵字最佳化工具", "輸入要最佳化的提示詞...", "關於", "隱私", "條款", "聯絡"],
+  ru: ["Оптимизатор ключевых слов промпта", "Введите промпт...", "О сервисе", "Конфиденциальность", "Условия", "Контакты"],
+  fr: ["Optimiseur de mots-clés de prompt", "Saisissez votre prompt...", "À propos", "Confidentialité", "Conditions", "Contact"],
+  de: ["Prompt Token Keyword Optimizer", "Prompt eingeben...", "Über", "Datenschutz", "Bedingungen", "Kontakt"],
+  es: ["Optimizador de palabras clave de prompts", "Introduce tu prompt...", "Acerca de", "Privacidad", "Términos", "Contacto"],
+  sv: ["Prompt Token Keyword Optimizer", "Ange din prompt...", "Om", "Integritet", "Villkor", "Kontakt"],
+  nl: ["Prompt Token Keyword Optimizer", "Voer je prompt in...", "Over", "Privacy", "Voorwaarden", "Contact"],
+  no: ["Prompt Token Keyword Optimizer", "Skriv inn prompten din...", "Om", "Personvern", "Vilkår", "Kontakt"],
+  ar: ["محسن كلمات المطالبة", "أدخل المطالبة...", "حول", "الخصوصية", "الشروط", "اتصال"]
 };
 
 Object.keys(labels).forEach((lang) => {
   const base = i18n.en;
-  const [appTitle, inputPlaceholder, about, privacy, terms] = labels[lang];
-  i18n[lang] = { ...base, appTitle, inputPlaceholder, about, privacy, terms };
+  const [appTitle, inputPlaceholder, about, privacy, terms, contact] = labels[lang];
+  i18n[lang] = { ...base, appTitle, inputPlaceholder, about, privacy, terms, contact };
 });
 
 const commonTranslations = {
